@@ -8,7 +8,7 @@ if (navigator.geolocation) {
     //Pass it to url
     latitude = position.coords.latitude.toFixed(3); //Round to 3 decimal places
     longitude = position.coords.longitude.toFixed(3); //Round to 3 decimal places
-    url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&units=metric' + '&appid=a8e29972d260d0df1639bf0d7199f680';
+    url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&units=metric' + '&appid=a8e29972d260d0df1639bf0d7199f680';
 
     //Get weather info using http://openweathermap.org/current
     $.getJSON(url, function(weatherJson) {
