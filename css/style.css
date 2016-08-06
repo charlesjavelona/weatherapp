@@ -1,0 +1,22 @@
+body {
+  color: #757575;
+}
+
+button {
+    background-color: transparent;
+    border-color: #757575;
+}
+
+button:hover {
+     background-color: white; 
+}
+
+#icon {
+  weight: 100px;
+  height: 100px;
+}
+
+#degrees {
+  font-weight: 50px;
+}
+
