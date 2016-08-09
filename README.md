@@ -24,4 +24,10 @@ This app is converted to Jquery Mobile for Mobile Jquery Class
 	- Search failure
  - Save users research history using localstorage
   
+# User story
+ 1.) As a user when I arrived at the website, I am able to see the current conditions as well as:
+    - Weather forecast for the day
+    - Data chart under weather forecaset to see the weather changes overtime
+    - Top button on search for city
+
 
