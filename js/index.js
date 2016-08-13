@@ -1,4 +1,61 @@
-if (navigator.geolocation) {
+//Load jQuery Mobile
+$(document).on('pagecreate', function() {
+	//Intitalize global data objects, which will be used to store api objects
+	userLocation = {};
+	weatherInfo = {};
+
+
+	function getPosition() {
+		var deferred = $.Deferred();
+		navigator.geolocation.getCurrentPosition(function(position) {
+			//Pass data to see if it GETS the positions
+			console.log(position.coords.latitude + ' ' + position.coords.longitude);
+			userLocation.latitude = position.coords.latitude;
+			userLocation.longitude = position.coords.longitude;
+			deferred.resolve();
+		});
+		return deferred.promise();
+	}
+
+
+	function getWeather() {
+		var deferred = $.Deferred();
+		url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + userLocation.latitude + '&lon=' + userLocation.longitude + '&units=metric' + '&appid=a8e29972d260d0df1639bf0d7199f680';
+
+   		//Get weather info using http://openweathermap.org/current
+		$.getJSON(url, function(weatherJson) {
+      			//Show data
+         		//prettyPrint = JSON.stringify(weatherJson, null, '\t');
+			//console.log(prettyPrint);
+			weatherInfo.weather = weatherJson;
+			deferred.resolve();
+		});//getJSON
+		return deferred.promise();
+	}//getWeather
+
+	
+	var template = $('#handlebars').html();
+
+	var templateScript = Handlebars.compile(template);
+
+	//GetPosition and Get Weather Chained
+	getPosition().done(function () {
+		console.log('Execute getPositon.done() ');		
+		getWeather().done(function () {
+			console.log('Execute getWeather.done()');
+			console.log(weatherInfo.weather.main.temp);
+			var html = templateScript(weatherInfo.weather.main);
+			$(document.body).append(html);
+			
+			
+		});//getWeather
+	})//getPosition
+
+
+
+});
+
+/*if (navigator.geolocation) {
   var latitude;
   var longitude;
 
@@ -105,3 +162,4 @@ function toFarenheit(num) {
 function toCelsius(num) {
   return Math.round(num - 32 * 5 / 9);
 }
+*/
