@@ -1,9 +1,27 @@
-//Load jQuery Mobile
-$(document).on('pagecreate', function() {
-	//Intitalize global data objects, which will be used to store api objects
-	userLocation = {};
-	weatherInfo = {};
+//Intitalize global data objects, which will be used to store api objects
+userLocation = {};
+weatherInfo = {};
 
+//Load jQuery Mobile the page shows
+$(document).on('pagebeforeshow', function() {
+
+	//GetPosition and Get Weather Chained
+	getPosition().done(function () {
+		console.log('Execute getPositon.done() ');		
+		getWeather().done(function () {
+			console.log('Execute getWeather.done()');
+			console.log(weatherInfo.weather.main.temp);
+			var template = $('#handlebars').html();
+			console.log(template);
+			var templateScript = Handlebars.compile(template);
+			console.log(template);
+			var html = templateScript(weatherInfo.weather.main);
+			console.log(html);
+			$(document.body).append(html);
+		});//getWeather
+	})//getPosition
+	
+});
 
 	function getPosition() {
 		var deferred = $.Deferred();
@@ -32,28 +50,7 @@ $(document).on('pagecreate', function() {
 		});//getJSON
 		return deferred.promise();
 	}//getWeather
-
 	
-	var template = $('#handlebars').html();
-
-	var templateScript = Handlebars.compile(template);
-
-	//GetPosition and Get Weather Chained
-	getPosition().done(function () {
-		console.log('Execute getPositon.done() ');		
-		getWeather().done(function () {
-			console.log('Execute getWeather.done()');
-			console.log(weatherInfo.weather.main.temp);
-			var html = templateScript(weatherInfo.weather.main);
-			$(document.body).append(html);
-			
-			
-		});//getWeather
-	})//getPosition
-
-
-
-});
 
 /*if (navigator.geolocation) {
   var latitude;
