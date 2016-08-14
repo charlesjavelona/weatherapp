@@ -35,7 +35,7 @@ $(document).on('pagecreate', function() {
 
 	function getWeather() {
 		var deferred = $.Deferred();
-		url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + userLocation.latitude + '&lon=' + userLocation.longitude + '&units=metric' + '&appid=a8e29972d260d0df1639bf0d7199f680';
+		url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + userLocation.latitude + '&lon=' + userLocation.longitude + '&units=metric' + '&appid=a8e29972d260d0df1639bf0d7199f680';
 
    		//Get weather info using http://openweathermap.org/current
 		$.getJSON(url, function(weatherJson) {
