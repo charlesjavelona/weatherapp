@@ -31,3 +31,7 @@ This app is converted to Jquery Mobile for Mobile Jquery Class
     - Top button on search for city
 
 
+# Task
+- [ ] Get all proper data
+- [ ] Display basic data with picture
+- [ ] Refactor

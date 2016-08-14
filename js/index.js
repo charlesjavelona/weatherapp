@@ -1,26 +1,23 @@
 //Intitalize global data objects, which will be used to store api objects
 userLocation = {};
 weatherInfo = {};
-
+var template;
 //Load jQuery Mobile the page shows
 $(document).on('pagebeforeshow', function() {
+	template = $('#handlebars').html();
+	$('div').remove();
+});
 
-	//GetPosition and Get Weather Chained
+$(document).on('pagecreate', function() {
+
+	//GetPosition and Get Weather ChainedV
 	getPosition().done(function () {
 		console.log('Execute getPositon.done() ');		
 		getWeather().done(function () {
 			console.log('Execute getWeather.done()');
-			console.log(weatherInfo.weather.main.temp);
-			var template = $('#handlebars').html();
-			console.log(template);
-			var templateScript = Handlebars.compile(template);
-			console.log(template);
-			var html = templateScript(weatherInfo.weather.main);
-			console.log(html);
-			$(document.body).append(html);
+			getTemplate();
 		});//getWeather
 	})//getPosition
-	
 });
 
 	function getPosition() {
@@ -51,6 +48,11 @@ $(document).on('pagebeforeshow', function() {
 		return deferred.promise();
 	}//getWeather
 	
+	function getTemplate() {
+			var templateScript = Handlebars.compile(template);
+			var html = templateScript(weatherInfo.weather.main);
+			$(document.body).append(html);
+	}
 
 /*if (navigator.geolocation) {
   var latitude;
