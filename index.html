@@ -4,26 +4,39 @@
     <meta charset="UTF-8">
     <title>WEATHER GENERATOR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/style.css">
     <!--row-->
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <link href="http://code.jquery.com/mobile/latest/jquery.mobile.css" rel="stylesheet" type="text/css" />
+    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+      <script src="http://code.jquery.com/mobile/latest/jquery.mobile.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
     <script src="js/index.js"></script>  
 
   </head>
   <body>
 <script id="handlebars" type="text/x-handlebars-template">
-		<div>
-			<h1>Page Title</h1>
+		<div data-role="page" id="currentWeather">
+			<div data-theme="a" data-role="header">
+				<h1>Page Title</h1>
+			</div>
+			<div role="main" class="ui-content">
+				<p>{{name}}</p>		
+				
+				{{#each weather}}
+					<p>{{id}}</p>
+					<p>{{main}}</p>
+					<p>{{description}}</p>
+					<p><img src="{{computeIcon}}"></img></p>
+				{{/each}}
+
+				<button id="button" class="ui-btn">Button</button>
+
+			</div>
+			<div data-role="footer">
+				<h4>Page Footer</h4>
+			</div>
 		</div>
-		<div role="main" class="ui-content">
-			{{temp}}		
-		</div>
-		<div>
-			<h4>Page Footer</h4>
-		</div>
-	</div>
 </script>
   </body>
 </html>

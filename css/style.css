@@ -1,14 +1,5 @@
-body {
-  color: #757575;
-}
-
-button {
-    background-color: transparent;
-    border-color: #757575;
-}
-
-button:hover {
-     background-color: white; 
+#currentWeather {
+	display: block;
 }
 
 #icon {
@@ -16,7 +7,4 @@ button:hover {
   height: 100px;
 }
 
-#degrees {
-  font-weight: 50px;
-}
 
