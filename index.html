@@ -5,38 +5,60 @@
     <title>WEATHER GENERATOR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--row-->
-    <link href="http://code.jquery.com/mobile/latest/jquery.mobile.css" rel="stylesheet" type="text/css" />
-    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-      <script src="http://code.jquery.com/mobile/latest/jquery.mobile.js"></script>
+    <!--link rel="stylesheet" href="https://themeroller.jquerymobile.com:443/?ver=1.4.5&style_id=20160815-23" -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.bundle.min.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/index.js"></script>  
-
   </head>
   <body>
-<script id="handlebars" type="text/x-handlebars-template">
-		<div data-role="page" id="currentWeather">
-			<div data-theme="a" data-role="header">
-				<h1>Page Title</h1>
-			</div>
-			<div role="main" class="ui-content">
-				<p>{{name}}</p>		
-				
-				{{#each weather}}
-					<p>{{id}}</p>
-					<p>{{main}}</p>
-					<p>{{description}}</p>
-					<p><img src="{{computeIcon}}"></img></p>
-				{{/each}}
-
-				<button id="button" class="ui-btn">Button</button>
-
-			</div>
-			<div data-role="footer">
-				<h4>Page Footer</h4>
-			</div>
+	<div data-role="page" id="weather"> 
+		  <div data-role="header" >
+			<h1>Page Title</h1>
 		</div>
-</script>
+    		<script id="weatherTemplate" type="text/x-handlebars-template">
+		<div role="main" class="ui-content" id="page">
+			<p>{{name}}</p>		
+			{{#each weather}}
+				<p>{{main}}</p>
+				<p>{{description}}</p>
+				<p><img src="{{computeIcon icon}}"></img></p>
+			{{/each}}
+			<p>{{main.temp}}</p>
+		</div>
+		</script>
+		
+		<div id="button" data-role="collapsible">
+			<h1>More:</h1>
+				
+    			<script id="forecastTemplate" type="text/x-handlebars-template">
+			<div role="main" class="ui-content" id="page">
+			<h1>5 Day Weather Forecast</h1>
+				{{#each list}}
+					<p>{{unixTimeConvert dt}}</p>
+
+					{{#each weather}}
+						<p>{{main}}</p>
+						<p>{{description}}</p>
+						<p><img src="{{computeIcon icon}}"></img></p>
+					{{/each}}
+					
+					<p>{{temp.min}}</p>
+					<p>{{temp.max}}</p>
+				{{/each}}
+			</div>
+			</script>
+			<h1>5 Day Weather Forecast</h1>
+			<canvas id="chartTemplate" width="400" height="400"></canvas>
+
+			</script>
+		</div>
+		<div data-role="footer">
+			<h4>Page Footer</h4>
+		</div>
+	</div>
   </body>
 </html>
