@@ -2,43 +2,14 @@
 var userLocation = {};	//Returns only the that is needed to diplay to the html template
 var weatherInfo = {};
 var template = {};
-//Load jQuery Mobile the page shows
-$(document).on('pagebeforeshow', function() {
-	template.weatherTemplate = $('#weatherTemplate').html();
-	template.forecastTemplate = $('#forecastTemplate').html();
-	template.ctr = $('#chartTemplate');
-
-});	
-
-$(document).on('pagecreate', function() {
-
-	//GetPosition and Get Weather Chained
-	getPosition().done(function () {
-		console.log('Execute getPositon.done() ');		
-		getCurrentWeather().done(function () {
-			console.log('Execute getWeather.done()');
-			getWeatherTemplate();
-		});//getWeather
-	})//getPosition
-
-//Reference:http://stackoverflow.com/questions/14468659/jquery-mobile-document-ready-vs-page-events/14469041#14469041	
-	$( "#button" ).on( "collapsibleexpand", function( event, ui ) {
-		getWeatherForecast().done(function() {
-			getForecastTemplate();	
-			getChartTemplate();
-		});
-	});
-});
-
-
 	function getPosition() {
 		var deferred = $.Deferred();
 		navigator.geolocation.getCurrentPosition(function(position) {
 		
 //Pass data to see if it GETS the positions
 			console.log(position.coords.latitude + ' ' + position.coords.longitude);
-			userLocation.latitude = position.coords.latitude;
-			userLocation.longitude = position.coords.longitude;
+			userLocation.latitude = position.coords.latitude.toFixed(2);
+			userLocation.longitude = position.coords.longitude.toFixed(2);
 			deferred.resolve();
 		});
 		return deferred.promise();
@@ -73,23 +44,47 @@ $(document).on('pagecreate', function() {
 		return deferred.promise();
 	}//getWeather
 
+	function getCityWeather() {
+		var deferred = $.Deferred();
+		url = 'http://api.openweathermap.org/data/2.5/weather?q=' + $('#citySearch').val() + '&units=metric' + '&appid=a8e29972d260d0df1639bf0d7199f680';
+
+		$.getJSON(url, function(weatherJson) {
+      			//Show data
+         		prettyPrint = JSON.stringify(weatherJson, null, '\t');
+			console.log(prettyPrint);
+			weatherInfo = weatherJson;
+			//Change userLocation
+			userLocation.latitude = weatherJson.coord.lat;
+			userLocation.longitude = weatherJson.coord.lon;
+			deferred.resolve();
+		});//getJSON
+		return deferred.promise();
+	}//getWeather
+
 	function getWeatherTemplate() {
 		//console.log(template);	
 		var templateScript = Handlebars.compile(template.weatherTemplate);
 		//console.log(templateScript);
 		/*weatherInfo is global right now*/
-		var html = templateScript(weatherInfo);
-		//console.log(html);
-		$("#weatherTemplate").replaceWith(html);
+		var t = templateScript(weatherInfo);
+		if($("#weatherTemplate").html() != undefined) {
+			$("#weatherTemplate").replaceWith(t);
+		} else {
+			$("#page").replaceWith(t);	
+		}
 	}
 
 	function getForecastTemplate() {
 		var templateScript = Handlebars.compile(template.forecastTemplate);
-		console.log(templateScript);
 		/*weatherInfo is global right now*/
-		var html = templateScript(weatherInfo.forecast);
-		console.log(html);
-		$("#forecastTemplate").replaceWith(html);
+		var t = templateScript(weatherInfo.forecast);
+		console.log(t);
+		debugger;
+		if($("#forecastTemplate").html() != undefined) {
+			$("#forecastTemplate").replaceWith(t);
+		} else {
+			$("#forecastPage").replaceWith(t);	
+		}
 	}
 
 	function getChartTemplate() {
@@ -166,3 +161,50 @@ $(document).on('pagecreate', function() {
 	Handlebars.registerHelper('unixTimeConvert', function(u) {
 		return new Date(u * 1000).toGMTString();
 	})
+//Load jQuery Mobile the page shows
+$(document).on('pagebeforeshow', function() {
+	template.weatherTemplate = $('#weatherTemplate').html();
+	template.forecastTemplate = $('#forecastTemplate').html();
+	template.ctr = $('#chartTemplate');
+
+});	
+
+$(document).on('pagecreate', function() {
+
+	if($("#citySearch").val() == "") {
+		//GetPosition and Get Weather Chained
+		getPosition().done(function () {
+			console.log('Execute getPositon.done() ');		
+			getCurrentWeather().done(function () {
+				console.log('Execute getWeather.done()');
+				getWeatherTemplate();
+			});//getWeather
+		})//getPosition
+	}
+
+//Reference:http://stackoverflow.com/questions/14468659/jquery-mobile-document-ready-vs-page-events/14469041#14469041	
+	$( "#button" ).on("collapsibleexpand", function( event, ui ) {
+		debugger;
+		getWeatherForecast().done(function() {
+			getForecastTemplate();	
+			getChartTemplate();
+		});
+	});
+
+	$("#citySearch").keypress(function(e) {
+		
+		//Collapse accordion
+		$("#button").collapsible("collapse");
+		if(e.which == 13) {
+			getCityWeather().done(function () {
+			
+			}).then(function() {
+				debugger;
+				getWeatherTemplate();
+			})
+		}
+	})
+});
+
+
+

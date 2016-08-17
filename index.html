@@ -17,7 +17,8 @@
   <body>
 	<div data-role="page" id="weather"> 
 		  <div data-role="header" >
-			<h1>Page Title</h1>
+			<h1>Weather App</h1>
+				    <input id="citySearch" data-type="search">
 		</div>
     		<script id="weatherTemplate" type="text/x-handlebars-template">
 		<div role="main" class="ui-content" id="page">
@@ -35,7 +36,7 @@
 			<h1>More:</h1>
 				
     			<script id="forecastTemplate" type="text/x-handlebars-template">
-			<div role="main" class="ui-content" id="page">
+			<div role="main" class="ui-content" id="forecastPage">
 			<h1>5 Day Weather Forecast</h1>
 				{{#each list}}
 					<p>{{unixTimeConvert dt}}</p>
@@ -51,7 +52,6 @@
 				{{/each}}
 			</div>
 			</script>
-			<h1>5 Day Weather Forecast</h1>
 			<canvas id="chartTemplate" width="400" height="400"></canvas>
 
 			</script>
