@@ -7,23 +7,18 @@ $(document).on('pagebeforeshow', function() {
 	template.weatherTemplate = $('#weatherTemplate').html();
 	template.forecastTemplate = $('#forecastTemplate').html();
 	template.ctr = $('#chartTemplate');
-
 });	
 
 $(document).on('pagecreate', function() {
-
 	if($("#citySearch").val() == "") {
 		//GetPosition and Get Weather Chained
 		getPosition().done(function () {
-			console.log('Execute getPositon.done() ');		
 			getCurrentWeather().done(function () {
-				console.log('Execute getWeather.done()');
 				getWeatherTemplate();
 			});//getWeather
 		})//getPosition
 	}
 
-//Reference:http://stackoverflow.com/questions/14468659/jquery-mobile-document-ready-vs-page-events/14469041#14469041	
 	$( "#button" ).on("collapsibleexpand", function( event, ui ) {
 		getWeatherForecast().done(function() {
 			getForecastTemplate();	
@@ -42,13 +37,11 @@ $(document).on('pagecreate', function() {
 			getCityWeather().done(function () {
 			
 			}).then(function() {
-				debugger;
 				var objects = [];
 				objects.push(JSON.parse(localStorage.getItem('searches')));
 				if (objects == null) {
 					localStorage.setItem("searches", JSON.stringify($('#citySearch').val()));
 				} else {
-					console.log($('#citySearch').val());
 					objects.push($('#citySearch').val());
 					localStorage.setItem("searches", JSON.stringify(objects));
 				}
@@ -62,14 +55,9 @@ $(document).on('pagecreate', function() {
 	})
 });
 
-
-
 	function getPosition() {
 		var deferred = $.Deferred();
 		navigator.geolocation.getCurrentPosition(function(position) {
-		
-//Pass data to see if it GETS the positions
-			console.log(position.coords.latitude + ' ' + position.coords.longitude);
 			userLocation.latitude = position.coords.latitude.toFixed(2);
 			userLocation.longitude = position.coords.longitude.toFixed(2);
 			deferred.resolve();
@@ -85,7 +73,6 @@ $(document).on('pagecreate', function() {
 		$.getJSON(url, function(weatherJson) {
       			//Show data
          		prettyPrint = JSON.stringify(weatherJson, null, '\t');
-			console.log(prettyPrint);
 			weatherInfo = weatherJson;
 			deferred.resolve();
 		});//getJSON
@@ -99,7 +86,6 @@ $(document).on('pagecreate', function() {
 		$.getJSON(url, function(weatherJson) {
       			//Show data
          		prettyPrint = JSON.stringify(weatherJson, null, '\t');
-			console.log(prettyPrint);
 			weatherInfo.forecast = weatherJson;
 			deferred.resolve();
 		});//getJSON
@@ -113,7 +99,6 @@ $(document).on('pagecreate', function() {
 		$.getJSON(url, function(weatherJson) {
       			//Show data
          		prettyPrint = JSON.stringify(weatherJson, null, '\t');
-			console.log(prettyPrint);
 			weatherInfo = weatherJson;
 			//Change userLocation
 			userLocation.latitude = weatherJson.coord.lat;
@@ -124,9 +109,7 @@ $(document).on('pagecreate', function() {
 	}//getWeather
 
 	function getWeatherTemplate() {
-		//console.log(template);	
 		var templateScript = Handlebars.compile(template.weatherTemplate);
-		//console.log(templateScript);
 		/*weatherInfo is global right now*/
 		var t = templateScript(weatherInfo);
 		if($("#weatherTemplate").html() != undefined) {
@@ -140,8 +123,6 @@ $(document).on('pagecreate', function() {
 		var templateScript = Handlebars.compile(template.forecastTemplate);
 		/*weatherInfo is global right now*/
 		var t = templateScript(weatherInfo.forecast);
-		console.log(t);
-		debugger;
 		if($("#forecastTemplate").html() != undefined) {
 			$("#forecastTemplate").replaceWith(t);
 		} else {
