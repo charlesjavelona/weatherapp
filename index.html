@@ -21,14 +21,17 @@
 				    <input id="citySearch" data-type="search">
 		</div>
     		<script id="weatherTemplate" type="text/x-handlebars-template">
-		<div role="main" class="ui-content" id="page">
-			<p>{{name}}</p>		
-			{{#each weather}}
-				<p>{{main}}</p>
-				<p>{{description}}</p>
-				<p><img src="{{computeIcon icon}}"></img></p>
-			{{/each}}
-			<p>{{main.temp}}</p>
+		<div role="main" class="ui-content ui-grid-b" id="page">
+			<div class="ui-block-a"></div>
+			<div class="ui-block-b">
+				<h3>{{name}}</h3>		
+				{{#each weather}}
+					<p>{{description}}</p>
+					<p><img src="{{computeIcon icon}}"></img></p>
+				{{/each}}
+				<p>{{main.temp}} degrees</p>
+			</div>
+			<div class="ui-block-c"></div>
 		</div>
 		</script>
 		
@@ -39,16 +42,20 @@
 			<div role="main" class="ui-content" id="forecastPage">
 			<h1>5 Day Weather Forecast</h1>
 				{{#each list}}
-					<p>{{unixTimeConvert dt}}</p>
-
+				<div class="ui-grid-b">
+				<div class="ui-block-b">
+					<h4>{{unixTimeConvert dt}}</h4>
+					<pre>
 					{{#each weather}}
-						<p>{{main}}</p>
 						<p>{{description}}</p>
 						<p><img src="{{computeIcon icon}}"></img></p>
 					{{/each}}
 					
-					<p>{{temp.min}}</p>
-					<p>{{temp.max}}</p>
+					<p>Minimum temp: {{temp.min}}</p>
+					<p>Maximum temp: {{temp.max}}</p>
+					</pre>
+				</div>
+				</div>
 				{{/each}}
 			</div>
 			</script>

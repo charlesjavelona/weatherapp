@@ -2,6 +2,68 @@
 var userLocation = {};	//Returns only the that is needed to diplay to the html template
 var weatherInfo = {};
 var template = {};
+//Load jQuery Mobile the page shows
+$(document).on('pagebeforeshow', function() {
+	template.weatherTemplate = $('#weatherTemplate').html();
+	template.forecastTemplate = $('#forecastTemplate').html();
+	template.ctr = $('#chartTemplate');
+
+});	
+
+$(document).on('pagecreate', function() {
+
+	if($("#citySearch").val() == "") {
+		//GetPosition and Get Weather Chained
+		getPosition().done(function () {
+			console.log('Execute getPositon.done() ');		
+			getCurrentWeather().done(function () {
+				console.log('Execute getWeather.done()');
+				getWeatherTemplate();
+			});//getWeather
+		})//getPosition
+	}
+
+//Reference:http://stackoverflow.com/questions/14468659/jquery-mobile-document-ready-vs-page-events/14469041#14469041	
+	$( "#button" ).on("collapsibleexpand", function( event, ui ) {
+		getWeatherForecast().done(function() {
+			getForecastTemplate();	
+			getChartTemplate();
+		})
+		.fail(function () {
+			alert('API called failed');
+		});
+	});
+
+	$("#citySearch").keypress(function(e) {
+		
+		//Collapse accordion
+		$("#button").collapsible("collapse");
+		if(e.which == 13) {
+			getCityWeather().done(function () {
+			
+			}).then(function() {
+				debugger;
+				var objects = [];
+				objects.push(JSON.parse(localStorage.getItem('searches')));
+				if (objects == null) {
+					localStorage.setItem("searches", JSON.stringify($('#citySearch').val()));
+				} else {
+					console.log($('#citySearch').val());
+					objects.push($('#citySearch').val());
+					localStorage.setItem("searches", JSON.stringify(objects));
+				}
+				
+				getWeatherTemplate();
+			})
+			.fail(function () {
+				alert("API call failed");
+			});
+		}
+	})
+});
+
+
+
 	function getPosition() {
 		var deferred = $.Deferred();
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -161,50 +223,3 @@ var template = {};
 	Handlebars.registerHelper('unixTimeConvert', function(u) {
 		return new Date(u * 1000).toGMTString();
 	})
-//Load jQuery Mobile the page shows
-$(document).on('pagebeforeshow', function() {
-	template.weatherTemplate = $('#weatherTemplate').html();
-	template.forecastTemplate = $('#forecastTemplate').html();
-	template.ctr = $('#chartTemplate');
-
-});	
-
-$(document).on('pagecreate', function() {
-
-	if($("#citySearch").val() == "") {
-		//GetPosition and Get Weather Chained
-		getPosition().done(function () {
-			console.log('Execute getPositon.done() ');		
-			getCurrentWeather().done(function () {
-				console.log('Execute getWeather.done()');
-				getWeatherTemplate();
-			});//getWeather
-		})//getPosition
-	}
-
-//Reference:http://stackoverflow.com/questions/14468659/jquery-mobile-document-ready-vs-page-events/14469041#14469041	
-	$( "#button" ).on("collapsibleexpand", function( event, ui ) {
-		debugger;
-		getWeatherForecast().done(function() {
-			getForecastTemplate();	
-			getChartTemplate();
-		});
-	});
-
-	$("#citySearch").keypress(function(e) {
-		
-		//Collapse accordion
-		$("#button").collapsible("collapse");
-		if(e.which == 13) {
-			getCityWeather().done(function () {
-			
-			}).then(function() {
-				debugger;
-				getWeatherTemplate();
-			})
-		}
-	})
-});
-
-
-
